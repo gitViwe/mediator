@@ -17,7 +17,6 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
         TotalCount = 0;
         CurrentPage = 1;
         PageSize = 15;
-        TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
     }
 
     /// <summary>
@@ -32,7 +31,6 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
         TotalCount = 0;
         CurrentPage = 1;
         PageSize = 15;
-        TotalPages = (int)Math.Ceiling(TotalCount / (double)PageSize);
     }
 
     /// <summary>
@@ -51,7 +49,6 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
         TotalCount = count;
         CurrentPage = page;
         PageSize = pageSize;
-        TotalPages = (int)Math.Ceiling(count / (double)pageSize);
     }
 
     /// <summary>
@@ -70,7 +67,6 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
         TotalCount = count;
         CurrentPage = page;
         PageSize = pageSize;
-        TotalPages = (int)Math.Ceiling(count / (double)pageSize);
     }
 
     /// <summary>
@@ -128,7 +124,7 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
     /// <summary>
     /// The total number of pages
     /// </summary>
-    public int TotalPages { get; }
+    public int TotalPages => (int)Math.Ceiling(TotalCount / (double)PageSize);
 
     /// <summary>
     /// The total number of items

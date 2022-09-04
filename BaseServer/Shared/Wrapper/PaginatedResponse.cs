@@ -11,9 +11,8 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
     /// </summary>
     /// <param name="succeeded">Flags whether the process was successful</param>
     internal PaginatedResponse(bool succeeded)
+        :base(succeeded)
     {
-        Succeeded = succeeded;
-        Messages = Array.Empty<string>();
         Data = Array.Empty<TData>();
         TotalCount = 0;
         CurrentPage = 1;
@@ -26,10 +25,9 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
     /// </summary>
     /// <param name="succeeded">Flags whether the process was successful</param>
     /// <param name="messages">The response messages</param>
-    public PaginatedResponse(bool succeeded, IEnumerable<string> messages)
+    internal PaginatedResponse(bool succeeded, IEnumerable<string> messages)
+        :base(succeeded, messages)
     {
-        Succeeded = succeeded;
-        Messages = messages;
         Data = Array.Empty<TData>();
         TotalCount = 0;
         CurrentPage = 1;
@@ -47,9 +45,8 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
     /// <param name="page">The current page number</param>
     /// <param name="pageSize">The number of items in a single page</param>
     internal PaginatedResponse(bool succeeded, IEnumerable<TData> data, int count, int page, int pageSize)
+        :base(succeeded)
     {
-        Succeeded = succeeded;
-        Messages = Array.Empty<string>();
         Data = data;
         TotalCount = count;
         CurrentPage = page;
@@ -67,9 +64,8 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
     /// <param name="page">The current page number</param>
     /// <param name="pageSize">The number of items in a single page</param>
     internal PaginatedResponse(bool succeeded, IEnumerable<string> messages, IEnumerable<TData> data, int count, int page, int pageSize)
+        :base(succeeded, messages)
     {
-        Succeeded = succeeded;
-        Messages = messages;
         Data = data;
         TotalCount = count;
         CurrentPage = page;
@@ -122,27 +118,27 @@ public class PaginatedResponse<TData> : Response where TData : class, new()
     /// <summary>
     /// The content returned from the request
     /// </summary>
-    public IEnumerable<TData> Data { get; private set; }
+    public IEnumerable<TData> Data { get; }
 
     /// <summary>
     /// The current page number
     /// </summary>
-    public int CurrentPage { get; private set; }
+    public int CurrentPage { get; }
 
     /// <summary>
     /// The total number of pages
     /// </summary>
-    public int TotalPages { get; private set; }
+    public int TotalPages { get; }
 
     /// <summary>
     /// The total number of items
     /// </summary>
-    public int TotalCount { get; private set; }
+    public int TotalCount { get; }
 
     /// <summary>
     /// The number of items in a single page
     /// </summary>
-    public int PageSize { get; private set; }
+    public int PageSize { get; }
 
     /// <summary>
     /// Determines if there are  additional pages behind

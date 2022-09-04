@@ -19,7 +19,7 @@ internal class SuperHeroService : ISuperHeroService
 
     public async Task<IEnumerable<SuperHeroResponse>> GetEnumerableAsync(CancellationToken token)
     {
-        var filePath = System.IO.Path.Combine(_environment.WebRootPath, HERO_JSON_FILE);
+        var filePath = Path.Combine(_environment.WebRootPath, HERO_JSON_FILE);
         var jsonString = await File.ReadAllTextAsync(filePath, token);
         var output = JsonSerializer.Deserialize<IEnumerable<SuperHeroResponse>>(jsonString);
         return output ?? Array.Empty<SuperHeroResponse>();

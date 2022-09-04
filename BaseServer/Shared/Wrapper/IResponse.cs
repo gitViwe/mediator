@@ -8,12 +8,12 @@ public interface IResponse
     /// <summary>
     /// The response messages
     /// </summary>
-    IEnumerable<string> Messages { get; set; }
+    IEnumerable<string> Messages { get; }
 
     /// <summary>
     /// Flags whether the process was successful
     /// </summary>
-    bool Succeeded { get; set; }
+    bool Succeeded { get; }
 }
 
 /// <summary>

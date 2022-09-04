@@ -6,14 +6,35 @@
 public class Response : IResponse
 {
     /// <summary>
+    /// Instantiate a new response to return
+    /// </summary>
+    /// <param name="succeeded">Flags whether the process was successful</param>
+    internal Response(bool succeeded)
+    {
+        Succeeded = succeeded;
+        Messages = Array.Empty<string>();
+    }
+
+    /// <summary>
+    /// Instantiate a new response to return
+    /// </summary>
+    /// <param name="succeeded">Flags whether the process was successful</param>
+    /// <param name="messages">The response messages</param>
+    internal Response(bool succeeded, IEnumerable<string> messages)
+    {
+        Succeeded = succeeded;
+        Messages = messages;
+    }
+
+    /// <summary>
     /// The response messages
     /// </summary>
-    public IEnumerable<string> Messages { get; set; } = new List<string>();
+    public IEnumerable<string> Messages { get; }
 
     /// <summary>
     /// Flags whether the process was successful
     /// </summary>
-    public bool Succeeded { get; set; }
+    public bool Succeeded { get; }
 
     /// <summary>
     /// Unsuccessful result
@@ -21,7 +42,7 @@ public class Response : IResponse
     /// <returns>The <see cref="Succeeded"/> property value</returns>
     public static IResponse Fail()
     {
-        return new Response { Succeeded = false };
+        return new Response(false);
     }
 
     /// <summary>
@@ -31,7 +52,7 @@ public class Response : IResponse
     /// <returns>The <see cref="Succeeded"/> and <see cref="Messages"/> property values</returns>
     public static IResponse Fail(string message)
     {
-        return new Response { Succeeded = false, Messages = new List<string> { message } };
+        return new Response(false, new List<string> { message });
     }
 
     /// <summary>
@@ -41,7 +62,7 @@ public class Response : IResponse
     /// <returns>The <see cref="Succeeded"/> and <see cref="Messages"/> property values</returns>
     public static IResponse Fail(IEnumerable<string> messages)
     {
-        return new Response { Succeeded = false, Messages = messages };
+        return new Response(false, messages);
     }
 
     /// <summary>
@@ -50,7 +71,7 @@ public class Response : IResponse
     /// <returns>The <see cref="Succeeded"/> property value</returns>
     public static IResponse Success()
     {
-        return new Response { Succeeded = true };
+        return new Response(true);
     }
 
     /// <summary>
@@ -60,7 +81,7 @@ public class Response : IResponse
     /// <returns>The <see cref="Succeeded"/> and <see cref="Messages"/> property values</returns>
     public static IResponse Success(string message)
     {
-        return new Response { Succeeded = true, Messages = new List<string> { message } };
+        return new Response(true, new List<string> { message });
     }
 
     /// <summary>
@@ -70,7 +91,7 @@ public class Response : IResponse
     /// <returns>The <see cref="Succeeded"/> and <see cref="Messages"/> property values</returns>
     public static IResponse Success(IEnumerable<string> messages)
     {
-        return new Response { Succeeded = true, Messages = messages };
+        return new Response(true, messages);
     }
 }
 
@@ -81,50 +102,96 @@ public class Response : IResponse
 public class Response<TData> : IResponse<TData> where TData : class, new()
 {
     /// <summary>
+    /// Instantiate a new response to return
+    /// </summary>
+    /// <param name="succeeded">Flags whether the process was successful</param>
+    /// <param name="data">The content returned from the request</param>
+    internal Response(bool succeeded)
+    {
+        Succeeded = succeeded;
+        Messages = Array.Empty<string>();
+        Data = new();
+    }
+
+    /// <summary>
+    /// Instantiate a new response to return
+    /// </summary>
+    /// <param name="succeeded">Flags whether the process was successful</param>
+    /// <param name="data">The content returned from the request</param>
+    internal Response(bool succeeded, TData data)
+    {
+        Succeeded = succeeded;
+        Messages = Array.Empty<string>();
+        Data = data;
+    }
+
+    /// <summary>
+    /// Instantiate a new response to return
+    /// </summary>
+    /// <param name="succeeded">Flags whether the process was successful</param>
+    /// <param name="messages">The response messages</param>
+    internal Response(bool succeeded, IEnumerable<string> messages)
+    {
+        Succeeded = succeeded;
+        Messages = messages;
+        Data = new();
+    }
+
+    /// <summary>
+    /// Instantiate a new response to return
+    /// </summary>
+    /// <param name="succeeded">Flags whether the process was successful</param>
+    /// <param name="messages">The response messages</param>
+    /// <param name="data">The content returned from the request</param>
+    internal Response(bool succeeded, IEnumerable<string> messages, TData data)
+    {
+        Succeeded = succeeded;
+        Messages = messages;
+        Data = data;
+    }
+
+    /// <summary>
     /// The content returned from the request
     /// </summary>
-    public TData Data { get; set; } = new();
+    public TData Data { get; }
 
     /// <summary>
     /// The response messages
     /// </summary>
-    public IEnumerable<string> Messages { get; set; } = new List<string>();
+    public IEnumerable<string> Messages { get; }
 
     /// <summary>
     /// Flags whether the process was successful
     /// </summary>
-    public bool Succeeded { get; set; }
+    public bool Succeeded { get; }
 
     /// <summary>
     /// Unsuccessful result
     /// </summary>
-    /// <param name="data">The content to add</param>
     /// <returns>The <see cref="Succeeded"/> property value</returns>
-    public static IResponse<TData> Fail(TData data)
+    public static IResponse<TData> Fail()
     {
-        return new Response<TData> { Succeeded = false, Data = data };
+        return new Response<TData>(false);
     }
 
     /// <summary>
     /// Unsuccessful result
     /// </summary>
     /// <param name="message">The error message to add</param>
-    /// <param name="data">The content to add</param>
     /// <returns>The <see cref="Succeeded"/> and <see cref="Messages"/> property values</returns>
-    public static IResponse<TData> Fail(string message, TData data)
+    public static IResponse<TData> Fail(string message)
     {
-        return new Response<TData> { Succeeded = false, Messages = new List<string> { message }, Data = data };
+        return new Response<TData>(false, new List<string> { message });
     }
 
     /// <summary>
     /// Unsuccessful result
     /// </summary>
     /// <param name="messages">The error messages to add</param>
-    /// <param name="data">The content to add</param>
     /// <returns>The <see cref="Succeeded"/> and <see cref="Messages"/> property values</returns>
-    public static IResponse<TData> Fail(IEnumerable<string> messages, TData data)
+    public static IResponse<TData> Fail(IEnumerable<string> messages)
     {
-        return new Response<TData> { Succeeded = false, Messages = messages, Data = data };
+        return new Response<TData>(false, messages);
     }
 
     /// <summary>
@@ -134,7 +201,7 @@ public class Response<TData> : IResponse<TData> where TData : class, new()
     /// <returns>The <see cref="Data"/> property value</returns>
     public static IResponse<TData> Success(TData data)
     {
-        return new Response<TData> { Succeeded = true, Data = data };
+        return new Response<TData>(true, data);
     }
 
     /// <summary>
@@ -145,7 +212,7 @@ public class Response<TData> : IResponse<TData> where TData : class, new()
     /// <returns>The <see cref="Succeeded"/> and <see cref="Messages"/> property values</returns>
     public static IResponse<TData> Success(string message, TData data)
     {
-        return new Response<TData> { Succeeded = true, Messages = new List<string> { message }, Data = data };
+        return new Response<TData>(true, new List<string> { message }, data);
     }
 
     /// <summary>
@@ -156,6 +223,6 @@ public class Response<TData> : IResponse<TData> where TData : class, new()
     /// <returns>The <see cref="Data"/> and <see cref="Messages"/> property values</returns>
     public static IResponse<TData> Success(IEnumerable<string> messages, TData data)
     {
-        return new Response<TData> { Succeeded = true, Data = data, Messages = messages };
+        return new Response<TData>(true, messages, data);
     }
 }
